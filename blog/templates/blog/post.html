@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+<!-- Page Header -->
+   <!-- Set your background image for this header on the line below. -->
+   <header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+       <div class="container">
+           <div class="row">
+               <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                   <div class="post-heading">
+                       <h1>Man must explore, and this is exploration at its greatest</h1>
+                       <h2 class="subheading">Problems look mighty small from 150 miles up</h2>
+                       <span class="meta">Posted by <a href="{% url 'about' %}">Rishabh Dev Manu</a> </span>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </header>
+
+   <div class="post">
+      {% if post.published_date %}
+          <div class="date">
+              {{ post.published_date }}
+          </div>
+      {% endif %}
+
+      <h1>{{ post.title }}</h1>
+      <p>{{ post.text|linebreaksbr }}</p>
+  </div>
+<!--comments here -->
+
+<hr>
+<p class="comment"> Comments </p>
+<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+{% for comment in post.comments.all %}
+    {% if user.is_authenticated or comment.approved_comment %}
+    <div class="comment">
+        <div class="date">
+            {{ comment.created_date }}
+            {% if not comment.approved_comment %}
+                <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+            {% endif %}
+        </div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+    {% endif %}
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
+
+{% endblock %}

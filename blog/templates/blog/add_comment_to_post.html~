@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Add Comment{% endblock %}
+{% block content %}
+    <h1>New comment</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default" value="submit" onclick="return showMessage()">Comment</button>
+    </form>
+<script type = "text/javascript">
+function showMessage() {
+alert ("Comment submitted and sent to moderator to approve - Thank you!");
+return true;
+}
+</script>
+
+{% endblock %}
